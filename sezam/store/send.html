@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Sezam screenshots</title></head>
+<body style="background:#0f1117;color:#eee;font:16px system-ui;padding:24px">
+<p id="s">Sending…</p>
+<script>
+(async () => {
+  const lang = (location.hash.slice(1) || 'ru');
+  const names = {en:['1-home.png','2-tilt.png','3-wires.png','4-trace.png','5-result.png'], ru:['1-home.png','2-tilt.png','3-dial.png','4-wires.png','5-result.png']}[lang];
+  const files = [];
+  for (const n of names) {
+    const b = await fetch(lang + '/' + n).then(r => r.blob());
+    files.push({ name: 'sezam-' + lang + '-' + n, blob: b });
+  }
+  const target = window.opener || (window.parent !== window ? window.parent : null);
+  if (target) { target.postMessage({ kometaShots: files, lang }, 'https://appstoreconnect.apple.com'); document.getElementById('s').textContent = 'Done'; }
+})();
+</script></body></html>
