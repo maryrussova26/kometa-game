@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><title>Kometa screenshots</title></head>
+<body style="background:#070918;color:#f2f0ff;font:16px system-ui;padding:24px">
+<p id="s">Передаю скриншоты в App Store Connect…</p>
+<script>
+(async () => {
+  const lang = (location.hash.slice(1) || 'ru');
+  const names = ['1-home.png', '2-orbit.png', '3-combo.png', '4-deep.png', '5-share.png'];
+  const files = [];
+  for (const n of names) {
+    const b = await fetch(lang + '/' + n).then(r => r.blob());
+    files.push({ name: 'kometa-' + lang + '-' + n, blob: b });
+  }
+  if (window.opener) {
+    window.opener.postMessage({ kometaShots: files, lang }, 'https://appstoreconnect.apple.com');
+    document.getElementById('s').textContent = 'Готово, это окно можно закрыть.';
+    setTimeout(() => window.close(), 800);
+  } else {
+    document.getElementById('s').textContent = 'Нет окна App Store Connect.';
+  }
+})();
+</script>
+</body></html>
