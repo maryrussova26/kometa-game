@@ -11,8 +11,9 @@
     const b = await fetch(lang + '/' + n).then(r => r.blob());
     files.push({ name: 'kometa-' + lang + '-' + n, blob: b });
   }
-  if (window.opener) {
-    window.opener.postMessage({ kometaShots: files, lang }, 'https://appstoreconnect.apple.com');
+  const target = window.opener || (window.parent !== window ? window.parent : null);
+  if (target) {
+    target.postMessage({ kometaShots: files, lang }, 'https://appstoreconnect.apple.com');
     document.getElementById('s').textContent = 'Готово, это окно можно закрыть.';
     setTimeout(() => window.close(), 800);
   } else {
